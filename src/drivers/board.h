@@ -1,7 +1,9 @@
 #pragma once
 
 #define LED_PIN 14
-#define ACCEL_SCL_PIN 16
-#define ACCEL_SDA_PIN 17
-#define ACCEL_SAD 0x19
-#define I2C_INSTANCE i2c0
+#define BUCKBOOST_SCL_PIN 2
+#define BUCKBOOST_SDA_PIN 3
+#define BUCKBOOST_SLAVE_ADDRESS 0x75
+#define I2C_INSTANCE i2c1
+
+#define VOUT_REGISTER 0x04 

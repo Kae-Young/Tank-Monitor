@@ -34,6 +34,7 @@ if(CrossCompiling)
         src/drivers/logging/logging.cpp
         src/drivers/led/led.cpp
         src/drivers/accelerometer/accelerometer.cpp
+        src/drivers/buckboost/buckboost.cpp
     )
     target_include_directories(labs
         PUBLIC 
@@ -88,6 +89,7 @@ else()
         tests/mocks/hardware/gpio.cpp
         tests/mocks/hardware/pio.cpp
         tests/mocks/ws2812.cpp
+        src/drivers/buckboost/buckboost.cpp
     )
     target_include_directories(labs
         PUBLIC 

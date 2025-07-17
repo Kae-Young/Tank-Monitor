@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
@@ -11,8 +12,10 @@
 #include "drivers/led/led.h"
 #include <math.h>
 
+
 void accel_init()
 {
+    /*
     i2c_init(I2C_INSTANCE, 400 * 1000);
     gpio_set_function(ACCEL_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(ACCEL_SCL_PIN, GPIO_FUNC_I2C);
@@ -55,10 +58,12 @@ void accel_init()
         log(LogLevel::ERROR, "lis3dh::write_registers: Failed to select CTRL_REG_1 register address.");
         return;
     }
+        */
 }
 
 void lis3dh_calc_value(uint16_t raw_value, float *final_value) 
 {
+    /*
     // Convert with respect to the value being temperature or acceleration reading 
     float scaling;
     float senstivity = 0.004f; // g per unit
@@ -67,10 +72,12 @@ void lis3dh_calc_value(uint16_t raw_value, float *final_value)
 
     // raw_value is signed
     *final_value = (float) ((int16_t) raw_value) / scaling;
+    */
 }
 
 void lis3dh_read_data(uint8_t reg, float *final_value) 
 {
+    /*
     // Read two bytes of data and store in a 16 bit data structure
     uint8_t lsb;
     uint8_t msb;
@@ -85,10 +92,12 @@ void lis3dh_read_data(uint8_t reg, float *final_value)
     raw_accel = (msb << 8) | lsb;
 
     lis3dh_calc_value(raw_accel, final_value);
+    */
 }
 
 void spirit_level_update(uint32_t* led_data, uint8_t max_brightness)
 {
+    /*
     //init and clear led
     led_data = led_clear_array(led_data, 12);
     //led_write(led_data);
@@ -113,7 +122,7 @@ void spirit_level_update(uint32_t* led_data, uint8_t max_brightness)
                 |                       4 |
                 |   8     7     6     5   |
                 |_________________________|
-    */
+    
 
     // get current x and y values
     lis3dh_read_data(0x28, &x_accel);
@@ -133,7 +142,7 @@ void spirit_level_update(uint32_t* led_data, uint8_t max_brightness)
         -----------------------------------------
         LED     |   8   |   7   |   6   |   5   |
 
-    */
+    
 
     // y axis
     if (y_accel <= 0.33)
@@ -290,4 +299,5 @@ void spirit_level_update(uint32_t* led_data, uint8_t max_brightness)
     }
     
     led_write(led_data);
+    */
 }
