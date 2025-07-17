@@ -11,6 +11,7 @@
 #include <math.h>
 
 void buckboost_init()
+{
     i2c_init(I2C_INSTANCE, 400 * 1000);
     gpio_set_function(BUCKBOOST_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(BUCKBOOST_SCL_PIN, GPIO_FUNC_I2C);
