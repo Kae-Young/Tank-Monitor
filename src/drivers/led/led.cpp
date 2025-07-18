@@ -15,8 +15,8 @@ uint32_t* led_init()
     ws2812_program_init(pio0, 0, pio_program_offset, LED_PIN, 800000, false);
 
     // Initialise led data array
-    static uint32_t led_data[12];
-    for (int i = 0; i < 12; i++)
+    static uint32_t led_data[2];
+    for (int i = 0; i < 2; i++)
     {
         led_data[i] = 0;
     }
@@ -72,7 +72,7 @@ uint32_t* led_set(int led_num, uint32_t* led_data, uint32_t value)
 
 void led_write(uint32_t* led_data) 
 {
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < 2; i++)
     {
         pio_sm_put_blocking(pio0, 0, led_data[i]);
     }
@@ -80,8 +80,8 @@ void led_write(uint32_t* led_data)
 
 void led_off()
 {
-    uint32_t j [12] = { };
-    for (int i = 0; i < 12; i++)
+    uint32_t j [2] = { };
+    for (int i = 0; i < 2; i++)
     {
         pio_sm_put_blocking(pio0, 0, j[i]);
     }
@@ -107,8 +107,10 @@ uint32_t* led_clear_array(uint32_t* led_data, int arr_size)
     return led_data;
 }
 
+
 void led_device_startup_show()
 {
+    /* INCOMPATIBLE
     uint32_t* led_data = led_init();
     
     for (int i = 1; i < 13; i++)
@@ -125,10 +127,14 @@ void led_device_startup_show()
         led_write(led_data);
         sleep_ms(50);
     }
+        */
 }
+    
 
+    
 void led_demo()
 {
+    /* INCOMPATIBLE
     uint32_t* led_data = led_init();
 
     for (int i = 1; i < 13; i++)
@@ -217,4 +223,6 @@ void led_demo()
         sleep_ms(100);
     }
     led_off();
+    */
 }
+    
