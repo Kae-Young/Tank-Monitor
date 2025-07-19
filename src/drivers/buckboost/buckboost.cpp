@@ -29,5 +29,5 @@ void buckboost_init()
     buf[1] = 0b01110010; //was getting vout of 5.14v on the 5v register of the buckboost conveter, changed to the 4.875v register to get an outtput voltage of 5V
     i2c_write_blocking(I2C_INSTANCE, BUCKBOOST_SLAVE_ADDRESS, buf, 2, false);
 
-    sleep_ms(2000);
+    sleep_ms(5000);
 }

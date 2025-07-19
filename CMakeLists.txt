@@ -35,6 +35,7 @@ if(CrossCompiling)
         src/drivers/led/led.cpp
         src/drivers/accelerometer/accelerometer.cpp
         src/drivers/buckboost/buckboost.cpp
+        src/drivers/level_sensor/level_sensor.cpp
     )
     target_include_directories(labs
         PUBLIC 
@@ -63,6 +64,7 @@ if(CrossCompiling)
         hardware_watchdog
         hardware_clocks
         hardware_pwm
+        hardware_adc
         pico_stdio_usb
         
     )
@@ -90,6 +92,7 @@ else()
         tests/mocks/hardware/pio.cpp
         tests/mocks/ws2812.cpp
         src/drivers/buckboost/buckboost.cpp
+        src/drivers/level_sensor/level_sensor.cpp
     )
     target_include_directories(labs
         PUBLIC 
