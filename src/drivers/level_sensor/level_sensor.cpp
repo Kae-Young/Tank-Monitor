@@ -19,8 +19,11 @@
 
 //electrical paramaters
 const float resistance = 1000000;
-const float max_discharge_voltage = 0.05;
+const float max_discharge_voltage = 0.5;
 const float min_charged_voltage = 0.865 * 3.3;
+const float vref = 3.3;
+const float adc_max = 4095;
+
 
 //probe dimensions
 const float probe_height_mm = 400;
@@ -44,11 +47,12 @@ float level_sensor_read_capacitance()
     gpio_put(LVL_SENS_TEST_SIG_PIN, false); //set test pin to 0V
 
     //wait for system to discharge
-    uint16_t voltage;
+    float Vout;;
     do
     {
-        
-    } while (voltage > max_discharge_voltage);
+        uint16_t raw = adc_read();  // Raw ADC reading (0–4095)
+        Vout = (raw / adc_max) * vref;
+    } while (Vout > max_discharge_voltage);
 
     //charge up phase
     absolute_time_t charge_start_time = get_absolute_time();    //start clock for charge up phase
@@ -56,13 +60,14 @@ float level_sensor_read_capacitance()
     //wait for cap to charge
     do
     {
-        voltage = adc_read();
-    } while (voltage < min_charged_voltage);
+        uint16_t raw = adc_read();  // Raw ADC reading (0–4095)
+        Vout = (raw / adc_max) * vref;
+    } while (Vout < min_charged_voltage);
     absolute_time_t charge_end_time = get_absolute_time();  //end clock for charge up
 
     //final calculations
     float charge_time_us = absolute_time_diff_us(charge_start_time, charge_end_time);
     float capacitance = (charge_time_us*1000000)/(2*resistance);
 
-    return charge_time_us;
+    return capacitance;
 }
