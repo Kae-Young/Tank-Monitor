@@ -12,7 +12,7 @@
 #include "drivers/temperature/temp.h"
 #include "drivers/level_sensor/level_sensor.h"
 
-//update
+
 int main()
 {
     led_blink();
@@ -20,7 +20,7 @@ int main()
     init_temperature_sensor();
 
     uint32_t* led_data = led_init();
-    led_set(1, led_data, led_colour(red));
+    led_set(1, led_data, led_colour(blue));
     led_write(led_data);
 
     stdio_init_all();
@@ -35,4 +35,5 @@ int main()
         sleep_ms(3000);
     }
     return 0;
+    
 }
