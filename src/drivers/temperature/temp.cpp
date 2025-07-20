@@ -3,10 +3,10 @@
 #include <math.h>
 #include <cstdio>
 
-#define R_FIXED 10000.0f       // 10k ohm fixed resistor
+/* #define R_FIXED 10000.0f       // 10k ohm fixed resistor
 #define BETA 3950.0f           // Thermistor beta value
 #define T0 298.15f             // Reference temperature (25°C in Kelvin)
-#define R0 10000.0f            // Thermistor resistance at T0
+#define R0 9200.0f            // Thermistor resistance at T0
 #define VREF 3.3f              // ADC reference voltage
 #define ADC_MAX 4095.0f        // 12-bit ADC maximum
 
@@ -27,3 +27,4 @@ float read_temperature_celsius() {
     float temp_K = 1.0f / ((1.0f / BETA) * log(R_thermistor / R0) + (1.0f / T0));
     return temp_K - 273.15f;  // Convert to Celsius
 }
+*/

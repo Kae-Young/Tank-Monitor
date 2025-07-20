@@ -37,6 +37,7 @@ if(CrossCompiling)
         src/drivers/buckboost/buckboost.cpp
         src/drivers/level_sensor/level_sensor.cpp
         src/drivers/temperature/temp.cpp
+        src/drivers/flowrate/flowrate.cpp
     )
     target_include_directories(labs
         PUBLIC 
@@ -95,6 +96,7 @@ else()
         src/drivers/buckboost/buckboost.cpp
         src/drivers/level_sensor/level_sensor.cpp
         src/drivers/temperature/temp.cpp
+        src/drivers/flowrate/flowrate.cpp
     )
     target_include_directories(labs
         PUBLIC 
