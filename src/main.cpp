@@ -32,8 +32,8 @@ int main()
     waterFlowData();
     
     while (true) {
-        //float temp = read_temperature_celsius();
-        //printf("Temperature: %.2f °C\n", temp);
+        float temp = read_temperature_celsius();
+        printf("Temperature: %.2f °C\n", temp);
 
         printf("%.6f \r\n", level_sensor_read_capacitance());
 
