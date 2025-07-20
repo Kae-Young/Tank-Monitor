@@ -11,28 +11,35 @@
 #include "drivers/buckboost/buckboost.h"
 #include "drivers/temperature/temp.h"
 #include "drivers/level_sensor/level_sensor.h"
+#include "drivers/flowrate/flowrate.h"
 
-//update
+
 int main()
 {
+    stdio_init_all();
+
     led_blink();
     buckboost_init();
-    init_temperature_sensor();
+    //init_temperature_sensor();
 
     uint32_t* led_data = led_init();
-    led_set(1, led_data, led_colour(red));
+    led_set(1, led_data, led_colour(blue));
     led_write(led_data);
 
-    stdio_init_all();
+    
     level_sensor_init();
+
+    waterFlowData();
     
     while (true) {
         float temp = read_temperature_celsius();
         printf("Temperature: %.2f °C\n", temp);
-        sleep_ms(2000);
 
         printf("%.6f \r\n", level_sensor_read_capacitance());
-        sleep_ms(3000);
+
+        printf("waterFlow: %.3f L\n", waterFlow);
+        sleep_ms(1000);
     }
     return 0;
+    
 }
