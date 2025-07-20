@@ -27,11 +27,8 @@ int main()
     level_sensor_init();
     
     while (true) {
-        float temp = read_temperature_celsius();  // Function defined in temperature.cpp
+        float temp = read_temperature_celsius();
         printf("Temperature: %.2f °C\n", temp);
-        sleep_ms(2000);
-        //printf("R_thermistor: %.1f Ω\n", R_thermistor);
-
         sleep_ms(2000);
 
         printf("%.6f \r\n", level_sensor_read_capacitance());
