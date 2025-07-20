@@ -36,6 +36,7 @@ if(CrossCompiling)
         src/drivers/accelerometer/accelerometer.cpp
         src/drivers/buckboost/buckboost.cpp
         src/drivers/level_sensor/level_sensor.cpp
+        src/drivers/temperature/temp.cpp
     )
     target_include_directories(labs
         PUBLIC 
@@ -93,6 +94,7 @@ else()
         tests/mocks/ws2812.cpp
         src/drivers/buckboost/buckboost.cpp
         src/drivers/level_sensor/level_sensor.cpp
+        src/drivers/temperature/temp.cpp
     )
     target_include_directories(labs
         PUBLIC 

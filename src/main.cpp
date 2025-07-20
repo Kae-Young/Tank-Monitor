@@ -15,6 +15,7 @@
 
 int main()
 {
+    led_blink();
     buckboost_init();
     init_temperature_sensor();
 
@@ -29,11 +30,9 @@ int main()
         float temp = read_temperature_celsius();
         printf("Temperature: %.2f °C\n", temp);
         sleep_ms(2000);
-    }
-    return 0;
-    while (true)
-    {
+
         printf("%.6f \r\n", level_sensor_read_capacitance());
         sleep_ms(3000);
     }
+    return 0;
 }
