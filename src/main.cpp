@@ -9,14 +9,21 @@
 #include "drivers/board.h"
 //#include "drivers/accelerometer/accelerometer.h"
 #include "drivers/buckboost/buckboost.h"
+#include "drivers/temperature/temp.h"
 
 
 int main()
 {
     buckboost_init();
+    init_temperature_sensor();
     uint32_t* led_data = led_init();
     led_set(1, led_data, led_colour(red));
     led_write(led_data);
     
+    while (true) {
+        float temp = read_temperature_celsius();
+        printf("Temperature: %.2f °C\n", temp);
+        sleep_ms(2000);
+    }
     return 0;
 }
