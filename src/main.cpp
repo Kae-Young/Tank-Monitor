@@ -9,14 +9,23 @@
 #include "drivers/board.h"
 //#include "drivers/accelerometer/accelerometer.h"
 #include "drivers/buckboost/buckboost.h"
+#include "drivers/level_sensor/level_sensor.h"
 
 
 int main()
 {
     buckboost_init();
+
     uint32_t* led_data = led_init();
     led_set(1, led_data, led_colour(red));
     led_write(led_data);
+
+    stdio_init_all();
+    level_sensor_init();
     
-    return 0;
+    while (true)
+    {
+        printf("%.6f \r\n", level_sensor_read_capacitance());
+        sleep_ms(3000);
+    }
 }
