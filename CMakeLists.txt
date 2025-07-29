@@ -38,6 +38,7 @@ if(CrossCompiling)
         src/drivers/level_sensor/level_sensor.cpp
         src/drivers/temperature/temp.cpp
         src/drivers/flowrate/flowrate.cpp
+        src/drivers/solinoid/solinoid.cpp
     )
     target_include_directories(labs
         PUBLIC 
@@ -97,6 +98,7 @@ else()
         src/drivers/level_sensor/level_sensor.cpp
         src/drivers/temperature/temp.cpp
         src/drivers/flowrate/flowrate.cpp
+        src/drivers/solinoid/solinoid.cpp
     )
     target_include_directories(labs
         PUBLIC 

@@ -12,6 +12,7 @@
 #include "drivers/temperature/temp.h"
 #include "drivers/level_sensor/level_sensor.h"
 #include "drivers/flowrate/flowrate.h"
+#include "drivers/solinoid/solinoid.h"
 
 
 int main()
@@ -30,14 +31,17 @@ int main()
     level_sensor_init();
 
     waterFlowData();
+
+    solinoid_setup();
     
     while (true) {
-        float temp = read_temperature_celsius();
-        printf("Temperature: %.2f °C\n", temp);
+        //float temp = read_temperature_celsius();
+        //printf("Temperature: %.2f °C\n", temp);
 
-        printf("%.6f \r\n", level_sensor_read_capacitance());
+        //printf("%.6f \r\n", level_sensor_read_capacitance());
 
-        printf("waterFlow: %.3f L\n", waterFlow);
+        //printf("waterFlow: %.3f L\n", waterFlow);
+        toggle_relay();
         sleep_ms(1000);
     }
     return 0;
