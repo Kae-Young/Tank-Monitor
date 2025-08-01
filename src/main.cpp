@@ -30,7 +30,7 @@ int main()
     
     level_sensor_init();
 
-    waterFlowData();
+    flow_sensor_init();
 
     solinoid_setup();
     
@@ -41,6 +41,7 @@ int main()
         //printf("%.6f \r\n", level_sensor_read_capacitance());
 
         //printf("waterFlow: %.3f L\n", waterFlow);
+        flow_data();
         toggle_relay_solenoid();
         sleep_ms(1000);
     }
