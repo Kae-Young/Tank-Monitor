@@ -41,7 +41,7 @@ int main()
         //printf("%.6f \r\n", level_sensor_read_capacitance());
 
         //printf("waterFlow: %.3f L\n", waterFlow);
-        toggle_relay();
+        toggle_relay_solenoid();
         sleep_ms(1000);
     }
     return 0;
