@@ -28,7 +28,7 @@ int main()
     led_write(led_data);
 
     
-    level_sensor_init();
+    lvl_sens_init();
 
     waterFlowData();
 
@@ -41,8 +41,10 @@ int main()
         //printf("%.6f \r\n", level_sensor_read_capacitance());
 
         //printf("waterFlow: %.3f L\n", waterFlow);
-        toggle_relay();
-        sleep_ms(1000);
+        //toggle_relay();
+        //lvl_sens_test();
+        printf("Capacitance: %.14f uF\r\n", lvl_sens_read_capacitance());
+        sleep_ms(3000);
     }
     return 0;
     

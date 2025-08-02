@@ -20,10 +20,10 @@
 //electrical paramaters
 const float resistance = 1000000;
 const float max_discharge_voltage = 0.5;
-const float min_charged_voltage = 0.865 * 3.3;
 const float vref = 3.3;
 const float adc_max = 4095;
-
+const float min_charged_voltage = 0.865 * 3.3;
+const float min_charged_raw = 0.865 * adc_max;
 
 //probe dimensions
 const float probe_height_mm = 400;
@@ -40,6 +40,10 @@ void lvl_sens_init()
 
     gpio_set_dir(LVL_SENS_CHARGE_PIN, GPIO_OUT);
     gpio_set_dir(LVL_SENS_DISCHARGE_PIN, GPIO_IN);
+
+    gpio_disable_pulls(LVL_SENS_DISCHARGE_PIN);
+    gpio_disable_pulls(LVL_SENS_CHARGE_PIN);
+
     adc_select_input(2);
 }
 
@@ -56,38 +60,40 @@ void lvl_sens_discharge()
     {
         uint16_t raw = adc_read();  //raw ADC reading (0–4095)
         Vout = (raw / adc_max) * vref;
-        printf("raw = %i, Vout = %.6f \r\n", raw, Vout);
+        //printf("raw = %i, Vout = %.6f \r\n", raw, Vout);
     } while (Vout > max_discharge_voltage);
 
     gpio_set_dir(LVL_SENS_DISCHARGE_PIN, GPIO_IN);  //stop capacitor discharging
 
-    printf("System discharged. Vout = %.6f \r\n", Vout);
+    //printf("System discharged. Vout = %.6f \r\n", Vout);
 }
 
 void lvl_sens_charge()
 {
-    //charge up phase
-    printf("Starting charge up \r\n");
-
-    absolute_time_t charge_start_time = get_absolute_time();    //start clock for charge up phase
+    //absolute_time_t charge_start_time = get_absolute_time();    //start clock for charge up phase
     gpio_put(LVL_SENS_CHARGE_PIN, 1);  //start charging capacitor
-
-    float Vout;
+    
+    //float Vout;
+    while (adc_read() < min_charged_raw)
+    {
+        sleep_us(50);
+    }
+    /*
     do
     {
         uint16_t raw = adc_read();  // Raw ADC reading (0–4095)
         Vout = (raw / adc_max) * vref;
-        absolute_time_t current_time = get_absolute_time();
-        float time_diff_us = absolute_time_diff_us(charge_start_time, current_time);
-        printf("Time (us): %f, ADC raw = %i, Vout = %.6f \r\n", time_diff_us, raw, Vout);
-        sleep_ms(10);
+        //absolute_time_t current_time = get_absolute_time();
+        //float time_diff_us = absolute_time_diff_us(charge_start_time, current_time);
+        //printf("Time (us): %f, ADC raw = %i, Vout = %.6f \r\n", time_diff_us, raw, Vout);
     } while (Vout < min_charged_voltage);
+     */
 
-    uint16_t raw = adc_read();
-    absolute_time_t current_time = get_absolute_time();
-    float time_diff_us = absolute_time_diff_us(charge_start_time, current_time);
+    //uint16_t raw = adc_read();
+    //absolute_time_t current_time = get_absolute_time();
+    //float time_diff_us = absolute_time_diff_us(charge_start_time, current_time);
 
-    printf("Time (us): %f, ADC raw = %i, Vout = %.6f \r\n", time_diff_us, raw, Vout);
+    //printf("Time (us): %f, ADC raw = %i, Vout = %.6f \r\n", time_diff_us, raw, Vout);
 }
 
 void lvl_sens_test()
@@ -96,38 +102,29 @@ void lvl_sens_test()
 
     lvl_sens_discharge();
 
+    absolute_time_t charge_start_time = get_absolute_time();    //start clock for charge up phase
     lvl_sens_charge();
+    absolute_time_t current_time = get_absolute_time(); //end clock
+
+    //final calculations
+    float time_diff_us = absolute_time_diff_us(charge_start_time, current_time);
+    float capacitance = (time_diff_us*1000000)/(2*resistance);
 }
 
 float lvl_sens_read_capacitance()
 {
-    /*
-    //discharge phase
-    gpio_put(LVL_SENS_TEST_SIG_PIN, false); //set test pin to 0V
+    adc_select_input(2);
 
-    //wait for system to discharge
-    float Vout;;
-    do
-    {
-        uint16_t raw = adc_read();  // Raw ADC reading (0–4095)
-        Vout = (raw / adc_max) * vref;
-    } while (Vout > max_discharge_voltage);
+    lvl_sens_discharge();
 
-    //charge up phase
     absolute_time_t charge_start_time = get_absolute_time();    //start clock for charge up phase
-    gpio_put(LVL_SENS_TEST_SIG_PIN, true);  //turn test voltage on
-    //wait for cap to charge
-    do
-    {
-        uint16_t raw = adc_read();  // Raw ADC reading (0–4095)
-        Vout = (raw / adc_max) * vref;
-    } while (Vout < min_charged_voltage);
-    absolute_time_t charge_end_time = get_absolute_time();  //end clock for charge up
+    lvl_sens_charge();
+    absolute_time_t current_time = get_absolute_time(); //end clock
 
     //final calculations
-    float charge_time_us = absolute_time_diff_us(charge_start_time, charge_end_time);
-    float capacitance = (charge_time_us*1000000)/(2*resistance);
+    float time_diff_us = absolute_time_diff_us(charge_start_time, current_time);
+    //float time_diff_s = time_diff_us/1000000;
+    float capacitance = (time_diff_us)/(2*resistance);
 
     return capacitance;
-    */
 }
