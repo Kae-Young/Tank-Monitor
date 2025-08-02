@@ -13,6 +13,7 @@
 #include "drivers/level_sensor/level_sensor.h"
 #include "drivers/flowrate/flowrate.h"
 #include "drivers/solinoid/solinoid.h"
+#include "drivers/ultrasonic/HC-SR04.h"
 
 
 int main()
@@ -32,6 +33,8 @@ int main()
 
     flow_sensor_init();
 
+    ultrasonic_init();
+
     solinoid_setup();
     
     while (true) {
@@ -44,8 +47,9 @@ int main()
         //toggle_relay();
         //lvl_sens_test();
         //printf("Capacitance: %.14f uF\r\n", lvl_sens_read_capacitance());
-        flow_data();
-        toggle_relay_solenoid();
+        //flow_data();
+        //toggle_relay_solenoid();
+        printf("Distance: %i cm", ultrasonic_distance());
         sleep_ms(1000);
     }
     return 0;
