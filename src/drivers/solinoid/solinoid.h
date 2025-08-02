@@ -2,4 +2,4 @@
 
 void solinoid_setup();
 
-void toggle_relay();
+void toggle_relay_solenoid(); 
