@@ -33,6 +33,8 @@ int main()
     level_sensor_init();
 
     waterFlowData();
+
+    solinoid_setup();
     
     while (true) {
         //float temp = read_temperature_celsius();
@@ -42,7 +44,8 @@ int main()
         //printf("Temperature: %.2f °C\n", temp);
 
         //printf("%.6f \r\n", level_sensor_read_capacitance());
-        //sleep_ms(3000);
+
+        //printf("waterFlow: %.3f L\n", waterFlow);
         toggle_relay_solenoid();
 
         printf("waterFlow: %.3f L\n", waterFlow);
