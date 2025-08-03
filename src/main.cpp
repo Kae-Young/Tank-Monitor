@@ -19,29 +19,31 @@ int main()
 {
     stdio_init_all();
 
-    led_blink();
+    //led_blink();
     buckboost_init();
     //init_temperature_sensor();
-
+    /*
     uint32_t* led_data = led_init();
     led_set(1, led_data, led_colour(blue));
     led_write(led_data);
-
+    */
     
     level_sensor_init();
 
-    flow_sensor_init();
+    waterFlowData();
 
     solinoid_setup();
     
     while (true) {
-        //float temp = read_temperature_celsius();
-        //printf("Temperature: %.2f °C\n", temp);
+        float temp = read_temperature_celsius();
+        printf("Temperature: %.2f °C\n", temp);
 
         //printf("%.6f \r\n", level_sensor_read_capacitance());
 
-        //printf("waterFlow: %.3f L\n", waterFlow);
-        flow_data();
+        
+        //flow_data();
+        //flow_data();
+
         toggle_relay_solenoid();
         sleep_ms(1000);
     }
