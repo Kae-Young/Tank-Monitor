@@ -11,7 +11,7 @@
 
 volatile double flowTotal = 0.0;
 
-extern volatile double water_volume = 0.0;
+volatile double total_water_volume = 0.0;
 volatile uint32_t pulse_count = 0;
 
     //New array code to test
@@ -36,7 +36,7 @@ volatile double calculate_average(volatile double *buffer, int count) {
 
 void pulse_handler(uint gpio, uint32_t events) {
     if (gpio == flowrate_sensor_pin && (events & GPIO_IRQ_EDGE_RISE)) {
-        water_volume += 1.0 / Pulses_Per_Litre;
+        total_water_volume += 1.0 / Pulses_Per_Litre;
         pulse_count++;
     }
 }
@@ -65,3 +65,7 @@ double flow_rate()
     return flow_rate;
 }
 
+double measured_volume()
+{
+    return total_water_volume;
+}

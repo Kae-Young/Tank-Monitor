@@ -52,7 +52,7 @@ int main()
         //toggle_relay();
     
         toggle_relay_solenoid();
-        printf("Flow rate: %d L/min, Measured volume: %d L, Actual Volume: %f L \n", ultrasonic_distance());
+        printf("Flow rate: %d L/min, Measured volume: %d L, Actual Volume: %f L, Temperature: %f \n", flow_rate(), measured_volume(), ultrasonic_volume(), read_temperature_celsius());
         //sleep_ms(1000);
     }
     return 0;
