@@ -1,5 +1,9 @@
 #pragma once
 
-void level_sensor_init();
+void lvl_sens_init();
 
-float level_sensor_read_capacitance();
+void lvl_sens_discharge();
+
+void lvl_sens_test();
+
+float lvl_sens_read_capacitance();
