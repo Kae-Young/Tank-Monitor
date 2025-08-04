@@ -3,6 +3,7 @@
 #include "hardware/gpio.h"
 #include "hardware/timer.h"
 #include "drivers/board.h"
+#include <math.h>
 
 int timeout = 26100;
 
@@ -14,7 +15,7 @@ void ultrasonic_init()
     gpio_set_dir(ECHO_PIN, GPIO_IN);
 }
 
-int ultrasonic_distance()
+float ultrasonic_distance()
 {
     gpio_put(TRIG_PIN, 1);
     sleep_us(10);
@@ -32,6 +33,18 @@ int ultrasonic_distance()
     }
     absolute_time_t endTime = get_absolute_time();
     
-    int pulse_length = absolute_time_diff_us(startTime, endTime);
-    return pulse_length / 29 / 2;
+    float pulse_length = absolute_time_diff_us(startTime, endTime);
+    float distance = pulse_length / 29 / 2;
+    return distance;
+}
+
+float ultrasonic_volume()
+{
+    float distance = ultrasonic_distance();
+    float water_level = BUCKET_HEIGHT_CM - distance;
+    float pi = 3.14159265358979323846;
+    float circle_area = 2*pi*BUCKET_RADIUS*BUCKET_RADIUS;
+    float volume_cm3 = water_level * circle_area;
+    float volume_L = 1000 * volume_cm3;
+    return volume_L;
 }
