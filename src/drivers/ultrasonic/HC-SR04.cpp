@@ -43,8 +43,8 @@ float ultrasonic_volume()
     float distance = ultrasonic_distance();
     float water_level = BUCKET_HEIGHT_CM - distance;
     float pi = 3.14159265358979323846;
-    float circle_area = 2*pi*BUCKET_RADIUS*BUCKET_RADIUS;
+    float circle_area = pi*BUCKET_RADIUS*BUCKET_RADIUS;
     float volume_cm3 = water_level * circle_area;
-    float volume_L = 1000 * volume_cm3;
+    float volume_L = volume_cm3/1000;
     return volume_L;
 }

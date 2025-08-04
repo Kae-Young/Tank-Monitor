@@ -33,11 +33,14 @@ int main()
     
     lvl_sens_init();
 
-    water_flow_init();
-
     ultrasonic_init();
 
+    water_flow_init();
+
     solinoid_setup();
+
+    //start clock
+    absolute_time_t start_time = get_absolute_time();
     
     while (true) {
         //float temp = read_temperature_celsius();
@@ -52,7 +55,9 @@ int main()
         //toggle_relay();
     
         toggle_relay_solenoid();
-        printf("Flow rate: %d L/min, Measured volume: %d L, Actual Volume: %f L, Temperature: %f \n", flow_rate(), measured_volume(), ultrasonic_volume(), read_temperature_celsius());
+        absolute_time_t current_time = get_absolute_time();
+        float timestamp = absolute_time_diff_us(start_time, current_time);
+        printf("Timestamp: %f, Flow rate: %.2f L/min, Measured volume: %.2f L, Actual Volume: %.2f L, Temperature: %.2f \n", timestamp, flow_rate(), measured_volume(), ultrasonic_volume(), read_temperature_celsius());
         //sleep_ms(1000);
     }
     return 0;

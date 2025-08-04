@@ -22,7 +22,7 @@ float read_temperature_celsius() {
 
     //Temperature calculations
     float temp_K = 1.0f / (1.0f / T0 + log(R_thermistor / R0) / BETA);
-    float temp_C = temp_K - 280.15f;
+    float temp_C = temp_K - 273.15f;
     return temp_C;
 }
 

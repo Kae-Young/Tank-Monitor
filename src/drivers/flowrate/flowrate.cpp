@@ -3,6 +3,7 @@
 #include "hardware/gpio.h"
 #include "hardware/pio.h"
 #include "drivers/flowrate/flowrate.h"
+#include "drivers/ultrasonic/HC-SR04.h"
 
 #define flowrate_sensor_pin 17
 #define Pulses_Per_Litre 450.0
@@ -20,6 +21,7 @@ volatile uint32_t pulse_count = 0;
 volatile double flow_readings[NUM_SAMPLES] = {0};
 volatile double previous_avg = 0;
 volatile double current_avg = 0;
+volatile double start_volume = 0;
 int sample_count = 0;
 
 static int index = 0;
@@ -47,6 +49,8 @@ void water_flow_init ()
     gpio_set_dir(flowrate_sensor_pin, GPIO_IN);
     gpio_pull_up(flowrate_sensor_pin);
 
+    start_volume = ultrasonic_volume();
+
     gpio_set_irq_enabled_with_callback(flowrate_sensor_pin, GPIO_IRQ_EDGE_RISE, true, &pulse_handler);
 }
 
@@ -67,5 +71,5 @@ double flow_rate()
 
 double measured_volume()
 {
-    return total_water_volume;
+    return start_volume - total_water_volume;
 }
