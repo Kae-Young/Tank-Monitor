@@ -3,11 +3,14 @@
 #include <stdint.h>
 #include "hardware/gpio.h"
 
+/// @brief Increments water_volume and pulse_count upon rising edge interupt
 void pulse_handler(uint gpio, uint32_t events);
-void waterFlowData();
-void flow_rate_calc();
-void flow_rate_average();
-void flow_data();
 
-extern volatile double waterFlow;
-extern volatile double flow_rate;
+/// @brief Initializes flow rate sensor
+void water_flow_init();
+
+void flow_rate_calc();
+
+void flow_rate_average();
+
+double flow_rate();

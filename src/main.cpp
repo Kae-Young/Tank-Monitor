@@ -33,7 +33,7 @@ int main()
     
     lvl_sens_init();
 
-    waterFlowData();
+    water_flow_init();
 
     ultrasonic_init();
 
@@ -50,11 +50,9 @@ int main()
 
         //printf("waterFlow: %.3f L\n", waterFlow);
         //toggle_relay();
-        //lvl_sens_test();
-        //printf("Capacitance: %.14f uF\r\n", lvl_sens_read_capacitance());
-        flow_data();
+    
         toggle_relay_solenoid();
-        printf("Distance: %i cm \n", ultrasonic_distance());
+        printf("Flow rate: %d L/min, Measured volume: %d L, Actual Volume: %f L \n", ultrasonic_distance());
         //sleep_ms(1000);
     }
     return 0;
