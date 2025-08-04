@@ -23,8 +23,14 @@ float ultrasonic_distance()
 
     int width = 0;
 
-    while (gpio_get(ECHO_PIN) == 0) tight_loop_contents();
     absolute_time_t startTime = get_absolute_time();
+    while (gpio_get(ECHO_PIN) == 0)
+    {
+        absolute_time_t current_time = get_absolute_time();
+        int elapsed_time = absolute_time_diff_us(startTime, current_time);
+        if (elapsed_time > 500000) return 9999;
+    }
+    startTime = get_absolute_time();
     while (gpio_get(ECHO_PIN) == 1) 
     {
         width++;
