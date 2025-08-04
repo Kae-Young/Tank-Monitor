@@ -6,8 +6,8 @@
 #define LVL_SENS_CHARGE_PIN 18
 #define LVL_SENS_DISCHARGE_PIN 20
 #define LVL_SENS_READ_PIN 28
-#define TRIG_PIN 24
-#define ECHO_PIN 25
+#define TRIG_PIN 22
+#define ECHO_PIN 20
 
 #define BUCKBOOST_SLAVE_ADDRESS 0x75
 #define I2C_INSTANCE i2c1

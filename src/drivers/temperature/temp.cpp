@@ -17,12 +17,12 @@ float read_temperature_celsius() {
     float R_thermistor = (Vout * R_FIXED) / (VREF - Vout);
     
     //Debug print
-    printf("DEBUG: Raw ADC = %u, Vout = %.3f V\n", raw, Vout);
-    printf("DEBUG: R_thermistor = %.1f Ω\n", R_thermistor);
+    //printf("DEBUG: Raw ADC = %u, Vout = %.3f V\n", raw, Vout);
+    //printf("DEBUG: R_thermistor = %.1f Ω\n", R_thermistor);
 
     //Temperature calculations
     float temp_K = 1.0f / (1.0f / T0 + log(R_thermistor / R0) / BETA);
-    float temp_C = temp_K - 273.15f;
+    float temp_C = temp_K - 280.15f;
     return temp_C;
 }
 
