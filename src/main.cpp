@@ -22,22 +22,27 @@ int main()
 
     led_blink();
     buckboost_init();
+    init_temperature_sensor();
     //init_temperature_sensor();
 
     uint32_t* led_data = led_init();
     led_set(1, led_data, led_colour(blue));
     led_write(led_data);
 
+    stdio_init_all();
     
     lvl_sens_init();
 
-    flow_sensor_init();
+    waterFlowData();
 
     ultrasonic_init();
 
     solinoid_setup();
     
     while (true) {
+        //float temp = read_temperature_celsius();
+        //printf("Temperature: %.2f °C\n", temp);
+        //sleep_ms(2000);
         //float temp = read_temperature_celsius();
         //printf("Temperature: %.2f °C\n", temp);
 
@@ -53,5 +58,4 @@ int main()
         sleep_ms(1000);
     }
     return 0;
-    
 }
