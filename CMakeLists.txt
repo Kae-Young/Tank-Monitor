@@ -40,6 +40,7 @@ if(CrossCompiling)
         src/drivers/flowrate/flowrate.cpp
         src/drivers/solinoid/solinoid.cpp
         src/drivers/ultrasonic/HC-SR04.cpp
+        src/drivers/uart/uart.cpp
     )
     target_include_directories(labs
         PUBLIC 
@@ -101,6 +102,7 @@ else()
         src/drivers/flowrate/flowrate.cpp
         src/drivers/solinoid/solinoid.cpp
         src/drivers/ultrasonic/HC-SR04.cpp
+        src/drivers/uart/uart.cpp
     )
     target_include_directories(labs
         PUBLIC 

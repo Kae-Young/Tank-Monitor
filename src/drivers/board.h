@@ -8,6 +8,8 @@
 #define LVL_SENS_READ_PIN 28
 #define TRIG_PIN 22
 #define ECHO_PIN 20
+#define UART_TX_PIN 0
+#define UART_RX_PIN 1
 
 #define BUCKBOOST_SLAVE_ADDRESS 0x75
 #define I2C_INSTANCE i2c1

@@ -14,6 +14,7 @@
 #include "drivers/flowrate/flowrate.h"
 #include "drivers/solinoid/solinoid.h"
 #include "drivers/ultrasonic/HC-SR04.h"
+#include "drivers/uart/uart.h"
 
 
 int main()
@@ -39,10 +40,16 @@ int main()
 
     solinoid_setup();
 
+    ui_init();
+
     //start clock
     absolute_time_t start_time = get_absolute_time();
     
     while (true) {
+        // Wait for input
+        while (!input_ready) {
+            __asm("wfi");  // Wait for interrupt
+        }
         //float temp = read_temperature_celsius();
         //printf("Temperature: %.2f °C\n", temp);
         //sleep_ms(2000);
@@ -55,10 +62,12 @@ int main()
         //toggle_relay();
     
         toggle_relay_solenoid();
-        absolute_time_t current_time = get_absolute_time();
-        float timestamp = absolute_time_diff_us(start_time, current_time);
-        printf("Timestamp: %f, Flow rate: %.2f L/min, Measured volume: %.2f L, Actual Volume: %.2f L, Temperature: %.2f \n", timestamp, flow_rate(), measured_volume(), ultrasonic_volume(), read_temperature_celsius());
+        //absolute_time_t current_time = get_absolute_time();
+        //float timestamp = absolute_time_diff_us(start_time, current_time);
+        //printf("Timestamp: %f, Flow rate: %.2f L/min, Measured volume: %.2f L, Actual Volume: %.2f L, Temperature: %.2f \n", timestamp, flow_rate(), measured_volume(), ultrasonic_volume(), read_temperature_celsius());
         //sleep_ms(1000);
     }
+
+    input_ready = false;
     return 0;
 }
