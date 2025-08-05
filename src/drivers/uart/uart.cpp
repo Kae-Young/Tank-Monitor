@@ -173,7 +173,7 @@ void print_readings(double readings[]) {
         }
     }
     term_set_color(clrGreen, clrBlack);
-    x_cursor = in_box.x_origin + 5;
+    x_cursor = in_box.x_origin + 5 + myIndex;
     y_cursor = in_box.y_origin + 2;
     term_move_to(x_cursor, y_cursor);
 }
