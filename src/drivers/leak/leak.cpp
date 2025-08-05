@@ -10,6 +10,7 @@
 #include "drivers/flowrate/flowrate.h"
 #include "drivers/ultrasonic/HC-SR04.h"
 #include "drivers/solinoid/solinoid.h"
+#include "drivers/uart/uart.h"
 
 /*void check_for_static_leak()
 {
@@ -46,7 +47,7 @@ void check_for_leak(double current_flow_rate, double current_measured_volume, do
     {
         //To add flash_blue, flash_red and flash_green
         //flash_red();
-        printf("Water level dropping with no flow. Check for leaks.\n");
+        print_output("Water level dropping with no flow. Check for leaks.\n");
     }
 
     //Leak detected more water lost than flow sensor indicates
@@ -54,7 +55,7 @@ void check_for_leak(double current_flow_rate, double current_measured_volume, do
     {
         //To add flash_blue, flash_red and flash_green functions
         //flash_blue();
-        printf("More water lost than recorded volume output.\n");
+        print_output("More water lost than recorded volume output.\n");
     }
 }
 
@@ -69,7 +70,7 @@ void check_for_blockage()
         double flowRate = flow_rate();
         if (flowRate < flow_threshold) {
             //flash_green();  // You can choose any LED pattern
-            printf("Solenoid is open but no water is flowing. Possible blockage detected.\n");
+            print_output("Solenoid is open but no water is flowing. Possible blockage detected.\n");
         }
     }
 }

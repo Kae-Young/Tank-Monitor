@@ -151,7 +151,7 @@ void print_output(char output[])  {
 const int readings_text_width = 25;
 const int readings_text_height = 5;
 // Print coordinates
-void print_readings(float readings[]) {
+void print_readings(double readings[]) {
     term_set_color(clrGreen, clrBlack);
     //set cursor position
     int x_cursor = round(((opt_box.width+2) - readings_text_width)/2 + opt_box.x_origin) + 18;
@@ -161,15 +161,15 @@ void print_readings(float readings[]) {
         term_move_to(x_cursor, i + y_cursor);
         if (i < 3)
         {
-            printf("%.2f L", readings[i]);
+            printf("%.2f L     ", readings[i]);
         }
         else if (i == 3)
         {
-            printf("%.2f C", readings[i]);
+            printf("%.2f C     ", readings[i]);
         }
         else
         {
-            printf("%.0f uS", readings[i]);
+            printf("%.0f uS    ", readings[i]);
         }
     }
     clr_input();
@@ -264,7 +264,7 @@ void draw_ui(bool readings_mode = true)  {
     draw_box(out_box);
     
     // Print coordinates
-    float zero[5] = {5, 5, 0, 25, 0};
+    double zero[5] = {5, 5, 0, 25, 0};
     print_readings(zero);
 
     // Draw input ready

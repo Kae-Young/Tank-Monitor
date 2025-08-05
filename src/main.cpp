@@ -44,56 +44,36 @@ int main()
 
     ui_init();
 
-    sleep_ms(1000);
+    absolute_time_t start_time = get_absolute_time();
     
     while (true) {
-
-        led_off();
-        uint32_t* led_data = led_init();
-        //led_set(1, led_data, led_colour(blue));
-        //led_set(1, led_data, led_colour(blue));
-        led_blink();
-        led_write(led_data);
-
-        double current_flow_rate = flow_rate();
-        double current_measured_volume = measured_volume();
-        double current_actual_volume = ultrasonic_volume();
         // Wait for input
-        /*
         while (!input_ready) {
-            __asm("wfi");  // Wait for interrupt
+            //record sensor readings
+            double current_flow_rate = flow_rate();
+            double current_measured_volume = measured_volume();
+            double current_actual_volume = ultrasonic_volume();
+            double current_volume_diff = current_measured_volume - current_actual_volume;
+            double current_temperature = read_temperature_celsius();
+            absolute_time_t current_time = get_absolute_time();
+            double timestamp = absolute_time_diff_us(start_time, current_time);
+
+            //store values and pass into readings print function
+            double readings[] = {current_measured_volume, current_actual_volume, current_volume_diff, current_temperature, timestamp};
+            print_readings(readings);
+
+            check_for_leak(current_flow_rate, current_measured_volume, current_actual_volume);
+
+            bool solenoid_now = is_solenoid_open();
+            if (!solenoid_open_last_cycle && solenoid_now) {
+                // It was off, now it's on — so check for blockage
+                check_for_blockage();
+            }
+            solenoid_open_last_cycle = solenoid_now;
+
+            toggle_relay_solenoid();
         }
-        */
-        //check_for_static_leak();
-
-        //check_for_flow_mismatch();
-        check_for_leak(current_flow_rate, current_measured_volume, current_actual_volume);
-
-        bool solenoid_now = is_solenoid_open();
-        if (!solenoid_open_last_cycle && solenoid_now) {
-            // It was off, now it's on — so check for blockage
-            check_for_blockage();
-        }
-        solenoid_open_last_cycle = solenoid_now;
-
-        //float temp = read_temperature_celsius();
-        //printf("Temperature: %.2f °C\n", temp);
-        //sleep_ms(2000);
-        //float temp = read_temperature_celsius();
-        //printf("Temperature: %.2f °C\n", temp);
-
-        //printf("%.6f \r\n", level_sensor_read_capacitance());
-
-        //printf("waterFlow: %.3f L\n", waterFlow);
-        //toggle_relay();
-    
-        toggle_relay_solenoid();
-        //absolute_time_t current_time = get_absolute_time();
-        //float timestamp = absolute_time_diff_us(start_time, current_time);
-        printf("Flow rate: %.2f L/min, Measured volume: %.2f L, Actual Volume: %.2f L, Temperature: %.2f \n", current_flow_rate, current_measured_volume, current_actual_volume, read_temperature_celsius());
-        //sleep_ms(1000);
+        input_ready = false;
     }
-
-    input_ready = false;
     return 0;
 }
