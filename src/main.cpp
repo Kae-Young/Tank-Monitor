@@ -15,6 +15,7 @@
 #include "drivers/solinoid/solinoid.h"
 #include "drivers/ultrasonic/HC-SR04.h"
 #include "drivers/uart/uart.h"
+#include "drivers/leak/leak.h"
 
 
 int main()
@@ -41,15 +42,15 @@ int main()
     solinoid_setup();
 
     ui_init();
-
-    //start clock
-    absolute_time_t start_time = get_absolute_time();
     
     while (true) {
         // Wait for input
         while (!input_ready) {
             __asm("wfi");  // Wait for interrupt
         }
+        check_for_static_leak();
+
+        check_for_flow_mismatch();
         //float temp = read_temperature_celsius();
         //printf("Temperature: %.2f °C\n", temp);
         //sleep_ms(2000);
