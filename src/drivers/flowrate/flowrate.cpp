@@ -48,15 +48,11 @@ void water_flow_init ()
     gpio_set_irq_enabled_with_callback(flowrate_sensor_pin, GPIO_IRQ_EDGE_RISE, true, &pulse_handler);
 }
 
-<<<<<<< HEAD
 void equalize_volumes()
 {
     start_volume = ultrasonic_volume();
 }
 
-=======
-//Reset pulse count to 0 every time this function is called. Wait a second to count the pulses received in 1 second. Calculate flow rate from that
->>>>>>> 06031179333a0847a73416acb347cc55799e96b3
 double flow_rate()
 {
     pulse_count = 0;
