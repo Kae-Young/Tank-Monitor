@@ -41,6 +41,7 @@ if(CrossCompiling)
         src/drivers/solinoid/solinoid.cpp
         src/drivers/ultrasonic/HC-SR04.cpp
         src/drivers/uart/uart.cpp
+        src/drivers/leak/leak.cpp
     )
     target_include_directories(labs
         PUBLIC 
@@ -104,6 +105,7 @@ else()
         src/drivers/solinoid/solinoid.cpp
         src/drivers/ultrasonic/HC-SR04.cpp
         src/drivers/uart/uart.cpp
+        src/drivers/leak/leak.cpp
     )
     target_include_directories(labs
         PUBLIC 
