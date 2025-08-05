@@ -16,3 +16,6 @@ void flow_rate_average();
 double flow_rate();
 
 double measured_volume();
+
+/// @brief Sets expects volume to actual volume recorded by ultrasonic sensor
+void equalize_volumes();

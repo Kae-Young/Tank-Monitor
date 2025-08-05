@@ -172,16 +172,19 @@ void print_readings(double readings[]) {
             printf("%.0f uS    ", readings[i]);
         }
     }
-    clr_input();
+    term_set_color(clrGreen, clrBlack);
+    x_cursor = in_box.x_origin + 5;
+    y_cursor = in_box.y_origin + 2;
+    term_move_to(x_cursor, y_cursor);
 }
 
 void fill_opt_box()
 {
     // Draw options box contents
     term_set_color(clrGreen, clrBlack);
-    char options[7][47] = {"menu - return to menu", "read - see readings", "reset - reset expected volume to actual volume", "valve - open/close valve", "pump - turn on/off pump", "resize - resize Window"};
+    char options[6][47] = {"menu - return to menu", "read - see readings", "reset - reset expected volume to actual volume", "valve - open/close valve", "pump - turn on/off pump"};
     int num_of_options = LEN(options);
-    int max_length = LEN(options[0]);
+    int max_length = LEN(options[2]);
     int x_cursor = round(((opt_box.width+2) - max_length)/2 + opt_box.x_origin);
     int y_cursor = round(((opt_box.height+2) - num_of_options)/2 + opt_box.y_origin);
     for (int i = 0; i < num_of_options; i++)
@@ -208,7 +211,7 @@ void fill_readings_box()
 }
 
 // Draw UI
-void draw_ui(bool readings_mode = true)  {
+void draw_ui(bool readings_mode = false)  {
     //the window is made up of a 9x9 grid
     double width = win_box.width;
     double height = win_box.height;
@@ -262,15 +265,12 @@ void draw_ui(bool readings_mode = true)  {
     }
     draw_box(in_box);
     draw_box(out_box);
-    
-    // Print coordinates
-    double zero[5] = {5, 5, 0, 25, 0};
-    print_readings(zero);
 
     // Draw input ready
     int x_cursor = in_box.x_origin + 3;
     int y_cursor = in_box.y_origin + 2;
     term_move_to(x_cursor, y_cursor);
+    term_set_color(clrGreen, clrBlack);
     printf("> ");
 
     print_output("Ready for commands...\n");
@@ -350,7 +350,7 @@ void ui_init()
     win_box.height = 33;                        //set box height
     win_box.x_origin = 5;                       //set box x origin
     win_box.y_origin = 5;                       //set box y origin
-    win_box.header = "CC2511 Assignment 2";     //set box header
+    win_box.header = "Tank Monitor";     //set box header
     win_box.is_heading_centered = true;         //set heading alignment
 
     draw_ui();

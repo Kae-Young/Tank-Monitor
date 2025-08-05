@@ -48,6 +48,8 @@ void check_for_leak(double current_flow_rate, double current_measured_volume, do
         //To add flash_blue, flash_red and flash_green
         //flash_red();
         print_output("Water level dropping with no flow. Check for leaks.\n");
+        sleep_ms(1000);
+        clr_output();
     }
 
     //Leak detected more water lost than flow sensor indicates

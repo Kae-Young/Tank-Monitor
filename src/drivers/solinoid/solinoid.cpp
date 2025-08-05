@@ -3,10 +3,7 @@
 #include "hardware/gpio.h"
 #include "hardware/pio.h"
 #include "drivers/solinoid/solinoid.h"
-
-#define relay_solenoid 13
-#define relay_motor 25
-#define SW1 15
+#include "drivers/board.h"
 
 void solinoid_setup() {
     gpio_init(SW1);
@@ -34,6 +31,16 @@ void toggle_relay_solenoid() {
             sleep_ms(500);
         }
     }
+}
+
+void set_relay_solenoid(bool state)
+{
+    gpio_put(relay_solenoid, state);
+}
+
+void set_relay_pump(bool state)
+{
+    gpio_put(relay_motor, state);
 }
 
 bool is_solenoid_open() {

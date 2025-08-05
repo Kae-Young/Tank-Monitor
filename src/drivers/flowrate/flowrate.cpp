@@ -49,9 +49,14 @@ void water_flow_init ()
     gpio_set_dir(flowrate_sensor_pin, GPIO_IN);
     gpio_pull_up(flowrate_sensor_pin);
 
-    start_volume = ultrasonic_volume();
+    equalize_volumes();
 
     gpio_set_irq_enabled_with_callback(flowrate_sensor_pin, GPIO_IRQ_EDGE_RISE, true, &pulse_handler);
+}
+
+void equalize_volumes()
+{
+    start_volume = ultrasonic_volume();
 }
 
 double flow_rate()
