@@ -21,29 +21,15 @@
 int main()
 {
     stdio_init_all();
-
-    //led_blink();
     buckboost_init();
     init_temperature_sensor();
-
-    /*uint32_t* led_data = led_init();
-    led_set(0, led_data, led_colour(green));
-    //led_set(1, led_data, led_colour(blue));
-    led_write(led_data);*/
-
     stdio_init_all();
-    
     lvl_sens_init();
-
     ultrasonic_init();
-
     water_flow_init();
-
     solinoid_setup();
     static bool solenoid_open_last_cycle = false;
-
     ui_init();
-
     absolute_time_t start_time = get_absolute_time();
     
     while (true) {
