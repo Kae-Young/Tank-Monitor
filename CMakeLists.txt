@@ -71,6 +71,7 @@ if(CrossCompiling)
         hardware_pwm
         hardware_adc
         pico_stdio_usb
+        hardware_uart
         
     )
 

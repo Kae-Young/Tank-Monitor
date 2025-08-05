@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string>
 #include <math.h>
 #include <drivers/board.h>
 
@@ -14,12 +13,6 @@
 #define PARITY    UART_PARITY_NONE
 
 #define LEN(arr) ((int) (sizeof (arr) / sizeof (arr)[0]))   //LEN(arr) for number of rows //LEN(arr[0]) for number of columns
-
-#define X_MAX 8000
-#define Y_MAX 5450
-#define Z_MAX 1800 //350 for spindle //1800 for nothing
-#define SPIN_MAX 255
-#define STEP_SLEEP 800
 
 // uart stuff
 static int chars_rxed = 0;
@@ -44,7 +37,7 @@ typedef struct box {
 
 // declare boxes
 box_T win_box;
-box_T xyz_box;
+box_T readings_box;
 box_T opt_box;
 box_T in_box;
 box_T out_box;
@@ -155,69 +148,94 @@ void print_output(char output[])  {
     clr_input();
 }
 
-const int coord_text_width = 9;
-const int coord_text_height = 4;
+const int readings_text_width = 25;
+const int readings_text_height = 5;
 // Print coordinates
-void print_coords(int coords[]) {
-    int normalised_coords[4];
-    int limits[4] = {X_MAX, Y_MAX, Z_MAX, SPIN_MAX};
-     for (int i = 0; i < 4; i++)
-    {
-        normalised_coords[i] = round(((double)coords[i]/(double)limits[i])*100);    //wrong max value
-    }
-    
+void print_readings(float readings[]) {
     term_set_color(clrGreen, clrBlack);
     //set cursor position
-    int x_cursor = round(((xyz_box.width+2) - coord_text_width)/2 + xyz_box.x_origin) + 4;
-    int y_cursor = round(((xyz_box.height+2) - coord_text_height)/2 + xyz_box.y_origin);
-    for (int i = 0; i < coord_text_height; i++)
+    int x_cursor = round(((opt_box.width+2) - readings_text_width)/2 + opt_box.x_origin) + 18;
+    int y_cursor = round(((opt_box.height+2) - readings_text_height)/2 + opt_box.y_origin);
+    for (int i = 0; i < readings_text_height; i++)
     {
         term_move_to(x_cursor, i + y_cursor);
-        if (normalised_coords[i] <= 9)
+        if (i < 3)
         {
-            printf("00%i %%", normalised_coords[i]);
+            printf("%.2f L", readings[i]);
         }
-        else if (normalised_coords[i] <= 99)
+        else if (i == 3)
         {
-            printf("0%i %%", normalised_coords[i]);
+            printf("%.2f C", readings[i]);
         }
         else
         {
-            printf("%i %%", normalised_coords[i]);
+            printf("%.0f uS", readings[i]);
         }
     }
     clr_input();
 }
 
+void fill_opt_box()
+{
+    // Draw options box contents
+    term_set_color(clrGreen, clrBlack);
+    char options[7][47] = {"menu - return to menu", "read - see readings", "reset - reset expected volume to actual volume", "valve - open/close valve", "pump - turn on/off pump", "resize - resize Window"};
+    int num_of_options = LEN(options);
+    int max_length = LEN(options[0]);
+    int x_cursor = round(((opt_box.width+2) - max_length)/2 + opt_box.x_origin);
+    int y_cursor = round(((opt_box.height+2) - num_of_options)/2 + opt_box.y_origin);
+    for (int i = 0; i < num_of_options; i++)
+    {
+      term_move_to(x_cursor, y_cursor + i);
+      printf(options[i]);
+    }
+}
+
+void fill_readings_box()
+{
+    // Draw readings box contents
+    term_set_color(clrGreen, clrBlack);
+    int x_cursor = round(((readings_box.width+2) - readings_text_width)/2 + readings_box.x_origin);
+    int y_cursor = round(((readings_box.height+2) - readings_text_height)/2 + readings_box.y_origin);
+    char readings[5][16] = {"Expected Volume", "Actual Volume", "Leakage Volume", "Temperature", "Elapsed Time"};
+    for (int i = 0; i < readings_text_height; i++)
+    {
+        term_move_to(x_cursor, i + y_cursor);
+        printf(readings[i]);
+        term_move_to(x_cursor + 16, i + y_cursor);
+        printf(":");
+    }
+}
+
 // Draw UI
-void draw_ui()  {
+void draw_ui(bool readings_mode = true)  {
     //the window is made up of a 9x9 grid
     double width = win_box.width;
     double height = win_box.height;
     double x_grid_step = width/9;
     double y_grid_step = height/9;
 
-    // Configure xyz box
-    xyz_box.width = round(2*x_grid_step);
-    xyz_box.height = round(3*y_grid_step);
-    xyz_box.x_origin = win_box.x_origin + round(1*x_grid_step);
-    xyz_box.y_origin = win_box.y_origin + round(1*y_grid_step);
-    xyz_box.header = "Coordinates";
-    xyz_box.is_heading_centered = true;
+    // Configure readings box
+    readings_box.width = round(7*x_grid_step);
+    readings_box.height = round(3*y_grid_step);
+    readings_box.x_origin = win_box.x_origin + round(1*x_grid_step);
+    readings_box.y_origin = win_box.y_origin + round(1*y_grid_step);
+    readings_box.header = "Readings";
+    readings_box.is_heading_centered = true;
 
     // Configure options box
-    opt_box.width = round(4*x_grid_step);
-    opt_box.height = xyz_box.height;                                  //equal height as xyz_box
-    opt_box.x_origin = win_box.x_origin + round(win_box.width - x_grid_step - opt_box.width);   //equal width as xyz_box
-    opt_box.y_origin = xyz_box.y_origin;                              //vertically aligned with xyz_box
+    opt_box.width = round(7*x_grid_step);
+    opt_box.height = round(3*y_grid_step);
+    opt_box.x_origin = win_box.x_origin + round(1*x_grid_step);
+    opt_box.y_origin = win_box.y_origin + round(1*y_grid_step);
     opt_box.header = "Options";
     opt_box.is_heading_centered = true;
 
     // Configure input box
-    in_box.width = round(xyz_box.width + opt_box.width + x_grid_step);     //same width as left of xyz_box to right of opt_box
+    in_box.width = round(opt_box.width);
     in_box.height = round(1.5*y_grid_step);                                  
-    in_box.x_origin = xyz_box.x_origin;                                     //aligned horizontally with xyz_box
-    in_box.y_origin = win_box.y_origin + round(xyz_box.height + 2*y_grid_step);                    
+    in_box.x_origin = opt_box.x_origin;                                     //aligned horizontally with xyz_box
+    in_box.y_origin = win_box.y_origin + round(opt_box.height + 2*y_grid_step);                    
     in_box.header = "Input";
     in_box.is_heading_centered = false;
 
@@ -232,42 +250,26 @@ void draw_ui()  {
     // Draw UI frame
     clear_ui();
     draw_box(win_box);
-    draw_box(xyz_box);
-    draw_box(opt_box);
+    if (readings_mode)
+    {
+        draw_box(readings_box);
+        fill_readings_box();
+    }
+    else
+    {
+        draw_box(opt_box);
+        fill_opt_box();
+    }
     draw_box(in_box);
     draw_box(out_box);
-
-    // Draw coord box contents
-    term_set_color(clrGreen, clrBlack);
-    int x_cursor = round(((xyz_box.width+2) - coord_text_width)/2 + xyz_box.x_origin);
-    int y_cursor = round(((xyz_box.height+2) - coord_text_height)/2 + xyz_box.y_origin);
-    char xyz[] = {'x', 'y', 'z', 's'};
-    for (int i = 0; i < coord_text_height; i++)
-    {
-        term_move_to(x_cursor, i + y_cursor);
-        printf("%c : ", xyz[i]);
-    }
-
-    // Draw options box contents
-    
-    char options[7][26] = {"move - manual control", "home - move to [0 0 0]", "load - load prefab", "zero - set to [0 0 0]", "setz - set spindle height", "resize - resize Window", "spin - set spindle on/off"};
-    int num_of_options = LEN(options);
-    int max_length = LEN(options[0]);
-    x_cursor = round(((opt_box.width+2) - max_length)/2 + opt_box.x_origin);
-    y_cursor = round(((opt_box.height+2) - num_of_options)/2 + opt_box.y_origin);
-    for (int i = 0; i < num_of_options; i++)
-    {
-      term_move_to(x_cursor, y_cursor + i);
-      printf(options[i]);
-    }
     
     // Print coordinates
-    int zero[4] = {0, 0, 0, 0};
-    print_coords(zero);
+    float zero[5] = {5, 5, 0, 25, 0};
+    print_readings(zero);
 
     // Draw input ready
-    x_cursor = in_box.x_origin + 3;
-    y_cursor = in_box.y_origin + 2;
+    int x_cursor = in_box.x_origin + 3;
+    int y_cursor = in_box.y_origin + 2;
     term_move_to(x_cursor, y_cursor);
     printf("> ");
 
