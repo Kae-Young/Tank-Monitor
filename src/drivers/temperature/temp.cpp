@@ -12,20 +12,16 @@
 
 float read_temperature_celsius() {
     adc_select_input(0);  //Select ADC0
-    uint16_t raw = adc_read();
+    uint16_t raw = adc_read(); //Raw ADC output data is saved
     float Vout = raw * VREF / 4095.0f;  //ADC to voltage conversion
-    float R_thermistor = (Vout * R_FIXED) / (VREF - Vout);
-    
-    //Debug print
-    //printf("DEBUG: Raw ADC = %u, Vout = %.3f V\n", raw, Vout);
-    //printf("DEBUG: R_thermistor = %.1f Ω\n", R_thermistor);
-
+    float R_thermistor = (Vout * R_FIXED) / (VREF - Vout); //Resistance Calculation
     //Temperature calculations
     float temp_K = 1.0f / (1.0f / T0 + log(R_thermistor / R0) / BETA);
-    float temp_C = temp_K - 273.15f;
+    float temp_C = temp_K - 273.15f; //Kelvin to celcius
     return temp_C;
 }
 
+//Initialise temperature pin
 void init_temperature_sensor() {
     adc_init();
     adc_gpio_init(THERMISTOR_ADC_GPIO);
