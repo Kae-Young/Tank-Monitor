@@ -21,10 +21,18 @@ void solinoid_setup() {
 
 void toggle_relay_solenoid() {
     if (gpio_get(SW1) == 1){
-        bool state_solenoid = gpio_get(relay_solenoid);
-        gpio_put(relay_solenoid, !state_solenoid);
-        bool state_motor = gpio_get(relay_motor);
-        gpio_put(relay_motor, !state_motor);
+        if(gpio_get(relay_solenoid) == 0){
+            gpio_put(relay_solenoid, 1);
+            sleep_ms(500);
+            gpio_put(relay_motor, 1);
+            sleep_ms(500);
+        }
+        else {
+            gpio_put(relay_motor, 0);
+            sleep_ms(500);
+            gpio_put(relay_solenoid, 0);
+            sleep_ms(500);
+        }
     }
 }
 
