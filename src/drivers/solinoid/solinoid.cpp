@@ -27,3 +27,7 @@ void toggle_relay_solenoid() {
         gpio_put(relay_motor, !state_motor);
     }
 }
+
+bool is_solenoid_open() {
+    return gpio_get(relay_solenoid);
+}

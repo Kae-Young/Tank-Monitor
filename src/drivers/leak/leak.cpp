@@ -23,7 +23,7 @@ void check_for_static_leak()
     {
         //To add flash_blue, flash_red and flash_green
         flash_red();
-        printf("Water level dropping with no flow. Check for leaks.");
+        printf("Water level dropping with no flow. Check for leaks.\n");
     }
 }
 
@@ -39,7 +39,7 @@ void check_for_flow_mismatch()
     {
         //To add flash_blue, flash_red and flash_green functions
         flash_blue();
-        printf("More water lost than recorded volume output.");
+        printf("More water lost than recorded volume output.\n");
     }
 }
 

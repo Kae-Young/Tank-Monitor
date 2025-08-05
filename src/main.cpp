@@ -40,6 +40,7 @@ int main()
     water_flow_init();
 
     solinoid_setup();
+    static bool solenoid_open_last_cycle = false;
 
     ui_init();
     
@@ -51,6 +52,15 @@ int main()
         check_for_static_leak();
 
         check_for_flow_mismatch();
+
+        bool solenoid_now = is_solenoid_open();
+        if (!solenoid_open_last_cycle && solenoid_now) {
+            // It was off, now it's on — so check for blockage
+            check_for_blockage();
+        }
+        solenoid_open_last_cycle = solenoid_now;
+
+    toggle_relay_solenoid();
         //float temp = read_temperature_celsius();
         //printf("Temperature: %.2f °C\n", temp);
         //sleep_ms(2000);
