@@ -26,5 +26,5 @@
 #define VOUT_REGISTER 0x04 
 
 //bucket dimensions
-#define BUCKET_HEIGHT_CM 24
+#define BUCKET_HEIGHT_CM 20.5
 #define BUCKET_RADIUS 12

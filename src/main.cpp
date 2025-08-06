@@ -68,9 +68,11 @@ int main()
             bool solenoid_now = is_solenoid_open();
             if (!solenoid_open_last_cycle && solenoid_now) {
                 // It was off, now it's on — so check for blockage
-                check_for_blockage();
+                //check_for_blockage();
             }
             solenoid_open_last_cycle = solenoid_now;
+
+            check_for_blockage();
 
             toggle_relay_solenoid();            
         }
@@ -86,17 +88,20 @@ int main()
         {
             is_readings_mode = false;
             draw_ui(is_readings_mode);
+            print_output("Ready for command...");
         }
         // READ
         else if (strcmp(command, option_read) == 0)
         {
             is_readings_mode = true;
             draw_ui(is_readings_mode);
+            print_output("Ready for command...");
         }
         // RESET
         else if (strcmp(command, option_reset) == 0)
         {
             equalize_volumes();
+            print_output("Set expected volume to actual volume.");
         }
         // VALVE
         else if (strcmp(command, option_valve) == 0)
@@ -104,10 +109,16 @@ int main()
             if (strcmp(argument, "open") == 0)
             {
                 set_relay_solenoid(true);
+                print_output("Solenoid valve opened.");
             }
             else if (strcmp(argument, "close") == 0)
             {
                 set_relay_solenoid(false);
+                print_output("Solenoid valve closed.");
+            }
+            else
+            {
+                print_output("Invalid argument. Syntax: 'valve [open/close]'.");
             }
         }
         // PUMP
@@ -116,11 +127,61 @@ int main()
             if (strcmp(argument, "on") == 0)
             {
                 set_relay_pump(true);
+                print_output("Pump on.");
             }
             else if (strcmp(argument, "off") == 0)
             {
                 set_relay_pump(false);
+                print_output("Pump off.");
             }
+            else
+            {
+                print_output("Invalid argument. Syntax: 'pump [on/off]'.");
+            }
+        }
+        // RESIZE
+        else if (strcmp(command, option_resize) == 0)    
+        {
+            // Set temp window parameters
+            uint width = 9999;
+            uint height = 9999;
+            uint x_origin = 9999;
+            uint y_origin = 9999;
+
+            input = sscanf(argument, "%d %d %d %d", &width, &height, &x_origin, &y_origin);
+
+            // Check if crucial parameters have changed
+            if (width == 9999 || height == 9999)
+            {
+                // If unchanged show user correct syntax
+                print_output("Syntax: \"resize [width] [height] [*x origin] [*y origin]\" *optional");
+            }
+            else
+            {
+                // If changed draw new window
+                clear_ui();
+                win_box.height = height;
+                win_box.width = width;
+
+                // Check if origin points are changed
+                if (x_origin == 9999 || y_origin == 9999)
+                {
+                    // If unchanged default origin to [1, 1]
+                    win_box.x_origin = 1;
+                    win_box.y_origin = 1;
+                }
+                else
+                {
+                    win_box.x_origin = x_origin;
+                    win_box.y_origin = y_origin;
+                }
+                
+                draw_ui();
+            }
+        }        
+        else
+        {
+            print_output("Invalid command.");
         }
         input_ready = false;
     }

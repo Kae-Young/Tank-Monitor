@@ -41,20 +41,22 @@ box_T readings_box;
 box_T opt_box;
 box_T in_box;
 box_T out_box;
+box_T old_win_box;
 
 void clear_ui() {
-    term_move_to(win_box.x_origin,win_box.y_origin);
+    term_move_to(old_win_box.x_origin,old_win_box.y_origin);
     term_set_color(clrBlack, clrBlack);
-    for (int i = 0; i < win_box.height + 1; i++)
+    for (int i = 0; i < old_win_box.height + 2; i++)
     {
-        for (int j = 0; j < win_box.width + 1; j++)
+        for (int j = 0; j < old_win_box.width + 2; j++)
         {
             printf(" ");
-            if(j == win_box.width)   {
+            if(j == old_win_box.width)   {
                 printf(" \r\n");
             }
         } 
-    }  
+    }
+    old_win_box = win_box;  
 }
 
 // Draw heading
@@ -125,7 +127,7 @@ void clr_input()     {
     int x_cursor = in_box.x_origin + 5;
     int y_cursor = in_box.y_origin + 2;
     term_move_to(x_cursor, y_cursor);
-    printf("                                                                    ");
+    printf("                                                                         ");
     term_move_to(x_cursor, y_cursor);
 }
 // Clear output box
@@ -134,7 +136,7 @@ void clr_output()    {
     int x_cursor = out_box.x_origin + 2;
     int y_cursor = out_box.y_origin + 2;
     term_move_to(x_cursor, y_cursor);
-    printf("                                                                    ");
+    printf("                                                                        ");
 }
 
 // Print to output box
@@ -145,7 +147,17 @@ void print_output(char output[])  {
     int y_cursor = out_box.y_origin + 2;
     term_move_to(x_cursor, y_cursor);
     uart_puts(UART_ID, output);
-    clr_input();
+    //return to input
+    if (!input_ready)
+    {
+        x_cursor = in_box.x_origin + 5 + myIndex;
+        y_cursor = in_box.y_origin + 2;
+        term_move_to(x_cursor, y_cursor);
+    }
+    else
+    {
+        clr_input();
+    }
 }
 
 const int readings_text_width = 25;
@@ -352,6 +364,8 @@ void ui_init()
     win_box.y_origin = 5;                       //set box y origin
     win_box.header = "Tank Monitor";     //set box header
     win_box.is_heading_centered = true;         //set heading alignment
+
+    old_win_box = win_box;
 
     draw_ui();
 }
