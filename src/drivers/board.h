@@ -1,7 +1,7 @@
 #pragma once
 
 //pin definitions
-#define LED_PIN 14
+#define LED_PIN 28
 
 #define BUCKBOOST_SCL_PIN 2
 #define BUCKBOOST_SDA_PIN 3

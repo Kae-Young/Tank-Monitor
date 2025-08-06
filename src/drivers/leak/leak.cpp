@@ -15,7 +15,7 @@
 //Combined Leak Detection
 void check_for_leak(double current_flow_rate, double current_measured_volume, double current_actual_volume)
 {
-    const double level_drop_threshold = 0.5;
+    const double level_drop_threshold = 0.35;
     //Leak detected water level is dropping but no flow through flow rate sensor
     if (current_flow_rate == 0 && (current_measured_volume - current_actual_volume) > level_drop_threshold)
     {
@@ -30,7 +30,11 @@ void check_for_leak(double current_flow_rate, double current_measured_volume, do
     {
         //Would add flash_blue, flash_red and flash_green functions if LEDs worked.
         //flash_blue();
-        print_output("More water lost than recorded volume output.\n");
+        print_output("More water lost than recorded volume output. Turning off pump and closing solenoid.\n");
+        set_relay_pump(false);
+        sleep_ms(500);
+        set_relay_solenoid(false);
+
     }
 }
 

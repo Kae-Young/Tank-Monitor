@@ -29,6 +29,7 @@ int main()
     ultrasonic_init();
     water_flow_init();
     solinoid_setup();
+    LED_init();
     static bool solenoid_open_last_cycle = false;
     ui_init();
 
@@ -47,6 +48,9 @@ int main()
     while (true) {
         // Wait for input
         while (!input_ready) {
+            LED_blink();
+
+
             //record sensor readings
             double current_flow_rate = flow_rate();
             double current_measured_volume = measured_volume();
