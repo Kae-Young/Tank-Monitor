@@ -6,4 +6,4 @@ void LED_on();
 
 void LED_off();
 
-void LED_blink();
+void LED_blink(int blink_period);

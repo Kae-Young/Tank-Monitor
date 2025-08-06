@@ -7,8 +7,8 @@
 #include "drivers/logging/logging.h"
 #include "led.h"
 #include "drivers/board.h"
+#include "drivers/uart/uart.h"
 
-int blink_period = 500000;
 bool state = false;
 absolute_time_t LED_time_ref;
 
@@ -30,12 +30,12 @@ void LED_off()
     gpio_put(LED_PIN, false);
 }
 
-void LED_blink()
+void LED_blink(int blink_period)
 {
     absolute_time_t current_time = get_absolute_time();
     int time_diff = absolute_time_diff_us(LED_time_ref, current_time);
     gpio_put(LED_PIN, state);
-    if (time_diff > 500000 && state)
+    if (time_diff > 500000)
     {
         LED_time_ref = get_absolute_time();
         state = !state;

@@ -48,9 +48,6 @@ int main()
     while (true) {
         // Wait for input
         while (!input_ready) {
-            LED_blink();
-
-
             //record sensor readings
             double current_flow_rate = flow_rate();
             double current_measured_volume = measured_volume();

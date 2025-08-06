@@ -22,8 +22,7 @@ void check_for_leak(double current_flow_rate, double current_measured_volume, do
         //Would add flash_blue, flash_red and flash_green functions if LEDs worked.
         //flash_red();
         print_output("Water level dropping with no flow. Check for leaks.\n");
-        sleep_ms(1000);
-        clr_output();
+        LED_blink(100000);
     }
     //Leak detected more water lost than flow sensor indicates
     if (current_flow_rate > 0 && (current_measured_volume - current_actual_volume) > level_drop_threshold)
@@ -34,7 +33,7 @@ void check_for_leak(double current_flow_rate, double current_measured_volume, do
         set_relay_pump(false);
         sleep_ms(500);
         set_relay_solenoid(false);
-
+        LED_blink(500000);
     }
 }
 
@@ -49,6 +48,15 @@ void check_for_blockage()
             //Would add flash_blue, flash_red and flash_green functions if LEDs worked.
             //flash_green();
             print_output("Solenoid is open but no water is flowing. Possible blockage detected.\n");
+            LED_on();
         }
+        else
+        {
+            LED_off();
+        }
+    }
+    else
+    {
+        LED_off();
     }
 }
