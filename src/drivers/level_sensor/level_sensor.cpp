@@ -78,37 +78,6 @@ void lvl_sens_charge()
     {
         sleep_us(50);
     }
-    /*
-    do
-    {
-        uint16_t raw = adc_read();  // Raw ADC reading (0–4095)
-        Vout = (raw / adc_max) * vref;
-        //absolute_time_t current_time = get_absolute_time();
-        //float time_diff_us = absolute_time_diff_us(charge_start_time, current_time);
-        //printf("Time (us): %f, ADC raw = %i, Vout = %.6f \r\n", time_diff_us, raw, Vout);
-    } while (Vout < min_charged_voltage);
-     */
-
-    //uint16_t raw = adc_read();
-    //absolute_time_t current_time = get_absolute_time();
-    //float time_diff_us = absolute_time_diff_us(charge_start_time, current_time);
-
-    //printf("Time (us): %f, ADC raw = %i, Vout = %.6f \r\n", time_diff_us, raw, Vout);
-}
-
-void lvl_sens_test()
-{
-    adc_select_input(2);
-
-    lvl_sens_discharge();
-
-    absolute_time_t charge_start_time = get_absolute_time();    //start clock for charge up phase
-    lvl_sens_charge();
-    absolute_time_t current_time = get_absolute_time(); //end clock
-
-    //final calculations
-    float time_diff_us = absolute_time_diff_us(charge_start_time, current_time);
-    float capacitance = (time_diff_us*1000000)/(2*resistance);
 }
 
 float lvl_sens_read_capacitance()
